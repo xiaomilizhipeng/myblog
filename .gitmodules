@@ -1,0 +1,3 @@
+[submodule "themes/terminal"]
+	path = themes/terminal
+	url = https://gh-proxy.com/https://github.com/panr/hugo-theme-terminal.git

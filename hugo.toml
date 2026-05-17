@@ -1,0 +1,62 @@
+baseURL = "http://8.148.12.251/"
+languageCode = "zh-cn"
+title = "小鹏视界"
+theme = "xiaopeng"
+
+[pagination]
+  pagerSize = 10
+
+[params]
+  author = "李志鹏"
+  description = "计算机硕士 · AI 全栈开发工程师 · 数码科技爱好者"
+  bio = "一名热爱技术的开发者，分享 AI 前沿、数码科技、生活感悟"
+  keywords = ["博客", "AI", "科技", "数码", "全栈开发"]
+
+  [[params.social]]
+    name = "github"
+    url = "https://github.com/xiaomilizhipeng"
+
+  [[params.social]]
+    name = "weixin"
+    url = "#"
+
+  [[params.social]]
+    name = "envelope"
+    url = "mailto:lizhipeng0613@qq.com"
+
+[[menu.main]]
+  name = "首页"
+  url = "/"
+  weight = 1
+
+[[menu.main]]
+  name = "博客"
+  url = "/posts/"
+  weight = 2
+
+[[menu.main]]
+  name = "标签"
+  url = "/tags/"
+  weight = 3
+
+[[menu.main]]
+  name = "关于"
+  url = "/about/"
+  weight = 4
+
+[outputs]
+  home = ["HTML", "RSS"]
+
+[markup]
+  [markup.highlight]
+    codeFences = true
+    guessSyntax = true
+    lineNos = true
+    style = "dracula"
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+
+[taxonomies]
+  tag = "tags"
+  category = "categories"

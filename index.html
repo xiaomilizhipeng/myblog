@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小鹏的博客 - 分享技术与生活</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- 加载动画 -->
+    <div class="loader" id="loader">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- 通知提示 -->
+    <div class="notification" id="notification">消息已发送！我会尽快回复您。</div>
+
+    <!-- 导航栏 -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="#home" class="logo" data-page="home">
+                    <i>XP</i>
+                    <span>小鹏的博客</span>
+                </a>
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="#home" class="active" data-page="home">首页</a></li>
+                    <li><a href="#about" data-page="about">关于</a></li>
+                    <li><a href="#blog" data-page="blog">博客</a></li>
+                    <li><a href="#contact" data-page="contact">联系</a></li>
+                </ul>
+                <div class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 主内容区域 -->
+    <main class="container">
+        <!-- 首页 -->
+        <section id="home" class="page active">
+            <div class="hero">
+                <h1>你好，我是小鹏</h1>
+                <p>一名热爱技术的开发者，分享编程知识、生活感悟和学习心得</p>
+                <div>
+                    <a href="#blog" class="btn" data-page="blog">查看博客</a>
+                    <a href="#contact" class="btn btn-outline" data-page="contact">联系我</a>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">最新文章</h2>
+                <div class="blog-grid">
+                    <div class="blog-card">
+                        <div class="card-img">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>深入理解JavaScript异步编程</h3>
+                            <p>探索Promise、async/await等异步编程模式，让你的代码更优雅高效...</p>
+                            <div class="card-meta">
+                                <span>2023-10-15</span>
+                                <span>5分钟阅读</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="blog-card">
+                        <div class="card-img">
+                            <i class="fas fa-laptop-code"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>CSS Grid布局完全指南</h3>
+                            <p>掌握现代CSS布局技术，创建响应式设计变得前所未有的简单...</p>
+                            <div class="card-meta">
+                                <span>2023-09-28</span>
+                                <span>8分钟阅读</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="blog-card">
+                        <div class="card-img">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>前端框架选择指南</h3>
+                            <p>React、Vue、Angular对比分析，帮助你做出最适合项目的决定...</p>
+                            <div class="card-meta">
+                                <span>2023-09-10</span>
+                                <span>6分钟阅读</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 关于页面 -->
+        <section id="about" class="page">
+            <div class="section">
+                <h2 class="section-title">关于我</h2>
+                <div class="about-content">
+                    <div class="profile-img">XP</div>
+                    <div class="about-text">
+                        <h3>你好，我是小鹏</h3>
+                        <p>我是一名前端开发工程师，热爱编程和技术写作。有5年的Web开发经验，专注于创建高性能、用户友好的网站应用。</p>
+                        <p>技术栈：HTML5, CSS3, JavaScript, React, Vue, Node.js</p>
+                        <p>业余时间我喜欢阅读、旅行和探索新技术。这个博客是我分享知识和经验的平台。</p>
+
+                        <div class="contact-info">
+                            <div class="contact-item">
+                                <i class="fab fa-weixin"></i>
+                                <span>微信：xiaopeng98613</span>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fas fa-envelope"></i>
+                                <span>邮箱：lizhipeng0613@qq.com</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 博客页面 -->
+        <section id="blog" class="page">
+            <div class="section">
+                <h2 class="section-title">所有文章</h2>
+                <div class="blog-grid">
+                    <div class="blog-card">
+                        <div class="card-img">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>深入理解JavaScript异步编程</h3>
+                            <p>探索Promise、async/await等异步编程模式，让你的代码更优雅高效...</p>
+                            <div class="card-meta">
+                                <span>2023-10-15</span>
+                                <span>5分钟阅读</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="blog-card">
+                        <div class="card-img">
+                            <i class="fas fa-laptop-code"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>CSS Grid布局完全指南</h3>
+                            <p>掌握现代CSS布局技术，创建响应式设计变得前所未有的简单...</p>
+                            <div class="card-meta">
+                                <span>2023-09-28</span>
+                                <span>8分钟阅读</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="blog-card">
+                        <div class="card-img">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>前端框架选择指南</h3>
+                            <p>React、Vue、Angular对比分析，帮助你做出最适合项目的决定...</p>
+                            <div class="card-meta">
+                                <span>2023-09-10</span>
+                                <span>6分钟阅读</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="blog-card">
+                        <div class="card-img">
+                            <i class="fas fa-database"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>构建高性能Node.js应用</h3>
+                            <p>从架构到优化，打造可扩展的后端服务...</p>
+                            <div class="card-meta">
+                                <span>2023-08-22</span>
+                                <span>10分钟阅读</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="blog-card">
+                        <div class="card-img">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>响应式设计最佳实践</h3>
+                            <p>让你的网站在所有设备上都完美呈现的技巧...</p>
+                            <div class="card-meta">
+                                <span>2023-08-05</span>
+                                <span>7分钟阅读</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="blog-card">
+                        <div class="card-img">
+                            <i class="fas fa-rocket"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>前端性能优化技巧</h3>
+                            <p>减少加载时间，提升用户体验的实用方法...</p>
+                            <div class="card-meta">
+                                <span>2023-07-20</span>
+                                <span>9分钟阅读</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 联系页面 -->
+        <section id="contact" class="page">
+            <div class="section">
+                <h2 class="section-title">联系我</h2>
+                <div class="contact-form">
+                    <div class="form-group">
+                        <label for="name">姓名</label>
+                        <input type="text" id="name" placeholder="请输入您的姓名">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">邮箱</label>
+                        <input type="email" id="email" placeholder="请输入您的邮箱">
+                    </div>
+                    <div class="form-group">
+                        <label for="message">留言内容</label>
+                        <textarea id="message" placeholder="请输入您要留言的内容..."></textarea>
+                    </div>
+                    <button class="btn" id="sendMessage">发送消息</button>
+                </div>
+
+                <div class="contact-info" style="justify-content: center; margin-top: 3rem;">
+                    <div class="contact-item">
+                        <i class="fab fa-weixin"></i>
+                        <span>微信：xiaopeng98613</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <span>邮箱：lizhipeng0613@qq.com</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>小鹏的博客</h3>
+                    <p>分享技术见解与生活感悟，探索编程世界的无限可能。</p>
+                    <div class="social-links">
+                        <a href="#" title="GitHub"><i class="fab fa-github"></i></a>
+                        <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" title="微信"><i class="fab fa-weixin"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3>快速链接</h3>
+                    <ul class="footer-links">
+                        <li><a href="#home" data-page="home">首页</a></li>
+                        <li><a href="#about" data-page="about">关于我</a></li>
+                        <li><a href="#blog" data-page="blog">博客文章</a></li>
+                        <li><a href="#contact" data-page="contact">联系我</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>订阅更新</h3>
+                    <p>订阅我的博客，获取最新文章和资讯。</p>
+                    <div class="form-group" style="margin-top: 15px;">
+                        <input type="email" placeholder="您的邮箱地址" style="width: 100%; padding: 10px; border-radius: var(--border-radius); border: none;">
+                    </div>
+                    <button class="btn" style="width: 100%;">订阅</button>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 小鹏的博客 | 微信: xiaopeng98613 | 邮箱: lizhipeng0613@qq.com</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>
