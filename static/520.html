@@ -137,8 +137,8 @@
   <div>天</div>
 </div>
 
-<audio id="bgm" loop>
-  <source src="https://assets.mixkit.co/music/preview/mixkit-summer-fun-music-13.mp3" type="audio/mpeg">
+<audio id="bgm" loop preload="auto">
+  <source src="https://cdn.pixabay.com/audio/2022/01/18/audio_d0a13f69d2.mp3" type="audio/mpeg">
 </audio>
 
 <script>
@@ -236,14 +236,26 @@ function typeWriter() {
 
 setTimeout(typeWriter, 2000);
 
-// 自动播放音乐（3秒后）
-setTimeout(() => {
-  const bgm = document.getElementById('bgm');
-  bgm.volume = 0.4;
+// 尝试自动播放，失败则等用户点击
+const bgm = document.getElementById('bgm');
+bgm.volume = 0.4;
+let musicStarted = false;
+
+function startMusic() {
+  if (musicStarted) return;
   bgm.play().then(() => {
+    musicStarted = true;
     document.getElementById('musicHint').classList.add('hidden');
   }).catch(() => {});
-}, 3000);
+}
+
+setTimeout(startMusic, 3000);
+
+// 用户首次点击时也尝试播放
+document.addEventListener('click', function handler() {
+  startMusic();
+  if (musicStarted) document.removeEventListener('click', handler);
+});
 
 // 点击爱心效果
 document.addEventListener('click', (e) => {
