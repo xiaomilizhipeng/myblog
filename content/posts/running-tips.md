@@ -3,7 +3,7 @@ icon: running
 title: "程序员的跑步指南：从 0 到 10 公里"
 date: 2026-05-14T08:00:00+08:00
 draft: false
-tags: ["跑步", "健康", "生活方式"]
+tags: ["日常户外"]
 categories: ["生活"]
 summary: "作为一个程序员，如何科学地开始跑步？分享我的经验。"
 weight: 3

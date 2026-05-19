@@ -2,7 +2,7 @@
 title: "你好世界！我的博客上线了"
 date: 2026-05-15T16:00:00+08:00
 draft: false
-tags: ["博客", "Hugo", "开始"]
+tags: ["技术相关"]
 categories: ["随笔"]
 summary: "用 Hugo + FixIt 搭建的个人博客正式上线，记录第一篇博文。"
 weight: 1

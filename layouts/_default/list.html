@@ -1,0 +1,189 @@
+{{ define "main" }}
+<div class="blog-layout">
+    <!-- 侧边栏 -->
+    <aside class="blog-sidebar">
+        <h3>文章分类</h3>
+        <ul class="tag-list">
+            <li><a href="/posts/" class="tag-btn {{ if not .IsNode }}active{{ end }}" data-tag="all">全部文章</a></li>
+            <li><a href="/tags/日常户外/" class="tag-btn {{ if and .IsNode (eq .Title "日常户外") }}active{{ end }}" data-tag="日常户外">🏕️ 日常户外</a></li>
+            <li><a href="/tags/小米相关/" class="tag-btn {{ if and .IsNode (eq .Title "小米相关") }}active{{ end }}" data-tag="小米相关">📱 小米相关</a></li>
+            <li><a href="/tags/技术相关/" class="tag-btn {{ if and .IsNode (eq .Title "技术相关") }}active{{ end }}" data-tag="技术相关">💻 技术相关</a></li>
+        </ul>
+    </aside>
+
+    <!-- 文章列表 -->
+    <div class="blog-content">
+        <h2 class="section-title">{{ .Title | default "所有文章" }}</h2>
+        <div class="blog-grid">
+            {{ range .Pages }}
+            <a href="{{ .Permalink }}" class="blog-card" style="text-decoration:none;color:inherit;" data-tags="{{ if .Params.tags }}{{ delimit .Params.tags "," }}{{ end }}">
+                <div class="card-img">
+                    <i class="fas fa-{{ .Params.icon | default "code" }}"></i>
+                </div>
+                <div class="card-content">
+                    <h3>{{ .Title }}</h3>
+                    <p>{{ .Summary | plainify | truncate 120 }}</p>
+                    <div class="card-meta">
+                        <span>{{ .Date.Format "2006-01-02" }}</span>
+                        <span>{{ .ReadingTime }} 分钟阅读</span>
+                    </div>
+                </div>
+            </a>
+            {{ end }}
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const tagBtns = document.querySelectorAll('.tag-btn');
+    const blogCards = document.querySelectorAll('.blog-card');
+    const currentPath = window.location.pathname;
+    
+    // 设置当前激活的标签
+    tagBtns.forEach(btn => {
+        if (btn.getAttribute('href') === currentPath) {
+            btn.classList.add('active');
+        }
+        
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const tag = this.getAttribute('data-tag');
+            
+            // 更新激活状态
+            tagBtns.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            
+            // 过滤文章
+            blogCards.forEach(card => {
+                if (tag === 'all') {
+                    card.style.display = '';
+                } else {
+                    const cardTags = card.getAttribute('data-tags') || '';
+                    if (cardTags.includes(tag)) {
+                        card.style.display = '';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                }
+            });
+            
+            // 更新 URL
+            if (tag === 'all') {
+                history.pushState(null, '', '/posts/');
+            } else {
+                history.pushState(null, '', '/tags/' + tag + '/');
+            }
+        });
+    });
+    
+    // 根据 URL 初始化显示
+    if (currentPath.includes('/tags/')) {
+        const currentTag = currentPath.split('/tags/')[1]?.replace('/', '');
+        if (currentTag) {
+            tagBtns.forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('data-tag') === currentTag) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            blogCards.forEach(card => {
+                const cardTags = card.getAttribute('data-tags') || '';
+                if (cardTags.includes(currentTag)) {
+                    card.style.display = '';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+    }
+});
+</script>
+
+<style>
+.blog-layout {
+    display: flex;
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 0;
+}
+
+.blog-sidebar {
+    width: 200px;
+    flex-shrink: 0;
+}
+
+.blog-sidebar h3 {
+    color: #333;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+.tag-list {
+    list-style: none;
+    padding: 0;
+}
+
+.tag-list li {
+    margin-bottom: 0.5rem;
+}
+
+.tag-btn {
+    display: block;
+    padding: 0.8rem 1rem;
+    background: #f5f5f5;
+    color: #666;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+}
+
+.tag-btn:hover {
+    background: #e0e0e0;
+    color: #333;
+}
+
+.tag-btn.active {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.blog-content {
+    flex: 1;
+}
+
+.blog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+    .blog-layout {
+        flex-direction: column;
+    }
+    
+    .blog-sidebar {
+        width: 100%;
+    }
+    
+    .tag-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+    
+    .tag-list li {
+        margin-bottom: 0;
+    }
+    
+    .tag-btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+    }
+}
+</style>
+{{ end }}

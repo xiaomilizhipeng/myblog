@@ -3,7 +3,7 @@ icon: robot
 title: "2026年，AI Agent 正在改变一切"
 date: 2026-05-15T10:00:00+08:00
 draft: false
-tags: ["AI", "Agent", "技术趋势"]
+tags: ["技术相关"]
 categories: ["技术"]
 summary: "从 ChatGPT 到 AI Agent，2026年是 Agent 元年。聊聊我的观察和思考。"
 weight: 2

@@ -1,0 +1,33 @@
+{{ define "main" }}
+<!-- 首页 Hero -->
+<section class="hero">
+    <h1>你好，我是小鹏</h1>
+    <p>{{ .Site.Params.bio | default "一名热爱技术的开发者，分享编程知识、生活感悟和学习心得" }}</p>
+    <div>
+        <a href="/posts/" class="btn">查看博客</a>
+        <a href="/about/" class="btn btn-outline">关于我</a>
+    </div>
+</section>
+
+<!-- 最新文章 -->
+<div class="section">
+    <h2 class="section-title">最新文章</h2>
+    <div class="blog-grid">
+        {{ range first 6 (where .Site.RegularPages "Section" "posts") }}
+        <a href="{{ .Permalink }}" class="blog-card" style="text-decoration:none;color:inherit;">
+            <div class="card-img">
+                <i class="fas fa-{{ .Params.icon | default "code" }}"></i>
+            </div>
+            <div class="card-content">
+                <h3>{{ .Title }}</h3>
+                <p>{{ .Summary | plainify | truncate 120 }}</p>
+                <div class="card-meta">
+                    <span>{{ .Date.Format "2006-01-02" }}</span>
+                    <span>{{ .ReadingTime }} 分钟阅读</span>
+                </div>
+            </div>
+        </a>
+        {{ end }}
+    </div>
+</div>
+{{ end }}
