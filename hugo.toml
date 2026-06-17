@@ -22,6 +22,14 @@ theme = "xiaopeng"
     url = "https://github.com/xiaomilizhipeng"
 
   [[params.social]]
+    name = "gitee"
+    url = "https://gitee.com/xiaopeng613"
+
+  [[params.social]]
+    name = "csdn"
+    url = "https://blog.csdn.net/weixin_46391112"
+
+  [[params.social]]
     name = "bilibili"
     url = "https://b23.tv/poE7N8h"
 
