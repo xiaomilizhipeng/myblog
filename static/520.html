@@ -7,15 +7,15 @@
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
-    min-height: 100vh;
     background: linear-gradient(135deg, #0a0a1a 0%, #1a1a2e 50%, #16213e 100%);
-    overflow: hidden;
     font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
-    cursor: pointer;
+    color: #f0e6e8;
+    overflow-x: hidden;
   }
-  canvas { position: fixed; top: 0; left: 0; z-index: 1; }
-  
-  .content {
+  canvas { position: fixed; top: 0; left: 0; z-index: 1; pointer-events: none; }
+
+  /* 首屏 */
+  .hero {
     position: relative;
     z-index: 10;
     display: flex;
@@ -25,7 +25,6 @@
     min-height: 100vh;
     padding: 20px;
   }
-  
   .title {
     color: #e8b4bc;
     font-size: 48px;
@@ -35,132 +34,325 @@
     opacity: 0;
     animation: fadeIn 2s ease forwards 1s;
   }
-  
   .message {
     color: #f0e6e8;
-    font-size: 24px;
+    font-size: 22px;
     line-height: 1.8;
     text-align: center;
     max-width: 600px;
     min-height: 80px;
   }
-  
-  .message span {
-    border-right: 2px solid #e8b4bc;
-    animation: blink 0.8s infinite;
+  .message span { border-right: 2px solid #e8b4bc; animation: blink 0.8s infinite; }
+  @keyframes blink { 0%,50%{border-color:#e8b4bc} 51%,100%{border-color:transparent} }
+  @keyframes fadeIn { to{opacity:1} }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 30px;
+    color: rgba(232,180,188,0.5);
+    font-size: 13px;
+    letter-spacing: 2px;
+    animation: bounce 2s infinite;
   }
-  
-  @keyframes blink {
-    0%, 50% { border-color: #e8b4bc; }
-    51%, 100% { border-color: transparent; }
-  }
-  
-  @keyframes fadeIn {
-    to { opacity: 1; }
-  }
-  
-  .countdown {
-    position: fixed;
-    bottom: 40px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 20;
+  @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(8px)} }
+
+  /* 倒计时 */
+  .countdown-bar {
+    position: relative;
+    z-index: 10;
     text-align: center;
-    color: rgba(232, 180, 188, 0.7);
+    padding: 40px 20px 20px;
+    color: rgba(232,180,188,0.7);
     font-size: 14px;
     letter-spacing: 2px;
   }
-  
-  .countdown .days {
-    font-size: 36px;
-    font-weight: 300;
+  .countdown-bar .days {
+    font-size: 56px;
+    font-weight: 200;
     color: #e8b4bc;
     margin: 10px 0;
+    text-shadow: 0 0 30px rgba(232,180,188,0.3);
   }
-  
-  .music-hint {
-    position: fixed;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 30;
-    color: rgba(232, 180, 188, 0.6);
-    font-size: 13px;
-    letter-spacing: 1px;
+
+  /* 时间线区域 */
+  .timeline-section {
+    position: relative;
+    z-index: 10;
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 60px 20px 100px;
+  }
+  .timeline-section h2 {
+    text-align: center;
+    color: #e8b4bc;
+    font-size: 28px;
+    font-weight: 300;
+    letter-spacing: 6px;
+    margin-bottom: 60px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 1s ease;
+  }
+  .timeline-section h2.visible { opacity: 1; transform: translateY(0); }
+
+  /* 时间线主体 */
+  .timeline {
+    position: relative;
+    padding-left: 40px;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 15px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom,
+      transparent,
+      rgba(232,180,188,0.3) 10%,
+      rgba(232,180,188,0.6) 50%,
+      rgba(232,180,188,0.3) 90%,
+      transparent
+    );
+  }
+
+  /* 流水动画 */
+  .timeline::after {
+    content: '';
+    position: absolute;
+    left: 14px;
+    top: 0;
+    width: 4px;
+    height: 60px;
+    background: linear-gradient(to bottom, transparent, #e8b4bc, transparent);
+    border-radius: 2px;
+    animation: flowDown 4s linear infinite;
+    filter: blur(1px);
+    box-shadow: 0 0 10px rgba(232,180,188,0.5);
+  }
+  @keyframes flowDown {
+    0% { top: -60px; opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { top: calc(100% + 60px); opacity: 0; }
+  }
+
+  /* 节点 */
+  .timeline-item {
+    position: relative;
+    margin-bottom: 35px;
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .timeline-item.visible {
     opacity: 1;
-    transition: opacity 1s;
+    transform: translateX(0);
   }
-  
-  .music-hint.hidden { opacity: 0; pointer-events: none; }
-  
+
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -33px;
+    top: 8px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #1a1a2e;
+    border: 2px solid rgba(232,180,188,0.5);
+    transition: all 0.5s ease;
+    z-index: 2;
+  }
+  .timeline-item.visible::before {
+    border-color: #e8b4bc;
+    box-shadow: 0 0 15px rgba(232,180,188,0.4);
+    background: #e8b4bc;
+  }
+
+  .timeline-item .date {
+    font-size: 13px;
+    color: rgba(232,180,188,0.6);
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+    font-weight: 300;
+  }
+  .timeline-item .content {
+    font-size: 16px;
+    color: #f0e6e8;
+    line-height: 1.6;
+    padding: 12px 18px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 12px;
+    border: 1px solid rgba(232,180,188,0.1);
+    transition: all 0.5s ease;
+  }
+  .timeline-item.visible .content {
+    border-color: rgba(232,180,188,0.2);
+    background: rgba(255,255,255,0.06);
+  }
+  .timeline-item .version {
+    display: inline-block;
+    font-size: 11px;
+    color: rgba(232,180,188,0.5);
+    background: rgba(232,180,188,0.1);
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-right: 8px;
+  }
+
+  /* 版本阶段标记 */
+  .phase-marker {
+    position: relative;
+    margin: 50px 0 35px;
+    padding-left: 0;
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: all 0.8s ease;
+  }
+  .phase-marker.visible { opacity: 1; transform: translateX(0); }
+  .phase-marker .phase-title {
+    display: inline-block;
+    font-size: 18px;
+    color: #e8b4bc;
+    letter-spacing: 4px;
+    padding: 8px 20px;
+    border: 1px solid rgba(232,180,188,0.3);
+    border-radius: 30px;
+    background: rgba(232,180,188,0.08);
+    margin-left: -10px;
+  }
+
+  /* TODO */
+  .todo-section {
+    position: relative;
+    z-index: 10;
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px 20px 60px;
+    text-align: center;
+  }
+  .todo-section h3 {
+    color: #e8b4bc;
+    font-size: 20px;
+    font-weight: 300;
+    letter-spacing: 4px;
+    margin-bottom: 30px;
+    opacity: 0;
+    transition: all 1s ease;
+  }
+  .todo-section h3.visible { opacity: 1; }
+  .todo-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 16px;
+    font-size: 16px;
+    color: rgba(240,230,232,0.8);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.6s ease;
+  }
+  .todo-item.visible { opacity: 1; transform: translateY(0); }
+  .todo-item .heart { color: #ff6b8a; font-size: 14px; }
+
+  /* 底部 */
+  .footer {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 40px 20px 60px;
+    color: rgba(232,180,188,0.4);
+    font-size: 13px;
+    letter-spacing: 3px;
+  }
+
+  /* 点击爱心 */
   .click-heart {
     position: fixed;
     pointer-events: none;
     z-index: 100;
     animation: floatUp 2s ease-out forwards;
   }
-  
   .click-heart .text {
     color: #ff6b8a;
     font-size: 16px;
     white-space: nowrap;
     text-align: center;
     margin-top: 8px;
-    animation: fadeScale 0.3s ease forwards;
   }
-  
   @keyframes floatUp {
-    0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
-    20% { transform: translate(-50%, -50%) scale(1.3); opacity: 1; }
-    100% { transform: translate(-50%, -150%) scale(1); opacity: 0; }
+    0% { transform: translate(-50%,-50%) scale(0); opacity: 0; }
+    20% { transform: translate(-50%,-50%) scale(1.3); opacity: 1; }
+    100% { transform: translate(-50%,-150%) scale(1); opacity: 0; }
   }
-  
-  @keyframes fadeScale {
-    0% { transform: scale(0); opacity: 0; }
-    100% { transform: scale(1); opacity: 1; }
+
+  /* 音乐提示 */
+  .music-hint {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 30;
+    color: rgba(232,180,188,0.6);
+    font-size: 13px;
+    letter-spacing: 1px;
+    transition: opacity 1s;
+    cursor: pointer;
   }
+  .music-hint.hidden { opacity: 0; pointer-events: none; }
 </style>
 </head>
 <body>
 <canvas id="canvas"></canvas>
 
-<div class="music-hint" id="musicHint">♪ 即将播放轻音乐</div>
+<div class="music-hint" id="musicHint">♪ 点击页面播放音乐</div>
 
-<div class="content">
+<!-- 首屏 -->
+<div class="hero">
   <div class="title">TO 十一</div>
   <div class="message" id="message"></div>
+  <div class="scroll-hint">↓ 往下滑动，看看我们的故事 ↓</div>
 </div>
 
-<div class="countdown">
-  <div>我们相识</div>
+<!-- 倒计时 -->
+<div class="countdown-bar">
+  <div>我们相识已经</div>
   <div class="days" id="days">0</div>
   <div>天</div>
 </div>
 
+<!-- 时间线 -->
+<div class="timeline-section">
+  <h2 class="reveal">— 我们的时光 —</h2>
+  <div class="timeline" id="timeline"></div>
+</div>
+
+<!-- TODO -->
+<div class="todo-section">
+  <h3 class="reveal">— 未来计划 —</h3>
+  <div class="todo-item reveal"><span class="heart">♡</span> 一起去看海</div>
+  <div class="todo-item reveal"><span class="heart">♡</span> 一起跑一次马拉松</div>
+  <div class="todo-item reveal"><span class="heart">♡</span> 一起看云海</div>
+</div>
+
+<div class="footer">❤ 本项目采用永久许可证，终身维护 ❤</div>
+
 <audio id="bgm" loop preload="auto">
-  <source src="https://cdn.pixabay.com/audio/2022/01/18/audio_d0a13f69d2.mp3" type="audio/mpeg">
+  <source src="https://music.163.com/song/media/outer/url?id=2654798511.mp3" type="audio/mpeg">
 </audio>
 
 <script>
+// === 樱花粒子 ===
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
-let particles = [];
-let width, height;
-
-// 设置画布
-function resize() {
-  width = canvas.width = window.innerWidth;
-  height = canvas.height = window.innerHeight;
-}
+let particles = [], width, height;
+function resize() { width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; }
 resize();
 window.addEventListener('resize', resize);
 
-// 樱花粒子
 class Petal {
-  constructor() {
-    this.reset();
-  }
-  
+  constructor() { this.reset(); }
   reset() {
     this.x = Math.random() * width;
     this.y = Math.random() * -100;
@@ -172,16 +364,13 @@ class Petal {
     this.opacity = Math.random() * 0.5 + 0.3;
     this.wobble = Math.random() * Math.PI * 2;
   }
-  
   update() {
     this.y += this.speedY;
     this.wobble += 0.02;
     this.x += Math.sin(this.wobble) * 0.3 + this.speedX;
     this.rotation += this.rotationSpeed;
-    
     if (this.y > height + 20) this.reset();
   }
-  
   draw() {
     ctx.save();
     ctx.translate(this.x, this.y);
@@ -194,98 +383,125 @@ class Petal {
     ctx.restore();
   }
 }
-
-// 初始化樱花
-for (let i = 0; i < 60; i++) {
-  const petal = new Petal();
-  petal.y = Math.random() * height;
-  particles.push(petal);
-}
-
-// 动画循环
-function animate() {
-  ctx.clearRect(0, 0, width, height);
-  particles.forEach(p => { p.update(); p.draw(); });
-  requestAnimationFrame(animate);
-}
+for (let i = 0; i < 60; i++) { const p = new Petal(); p.y = Math.random() * height; particles.push(p); }
+function animate() { ctx.clearRect(0, 0, width, height); particles.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(animate); }
 animate();
 
-// 打字机效果
+// === 打字机 ===
 const text = "从遇见你的那一刻起，我的世界便有了颜色。\n每一天醒来，想到有你在身边，\n就是我最想珍惜的小幸运。";
 const messageEl = document.getElementById('message');
-let charIndex = 0;
-let lineIndex = 0;
+let charIndex = 0, lineIndex = 0;
 const lines = text.split('\n');
-
 function typeWriter() {
   if (lineIndex < lines.length) {
     if (charIndex < lines[lineIndex].length) {
-      messageEl.innerHTML = lines.slice(0, lineIndex).join('<br>') + '<br>' + 
+      messageEl.innerHTML = lines.slice(0, lineIndex).join('<br>') + '<br>' +
         lines[lineIndex].substring(0, charIndex + 1) + '<span></span>';
       charIndex++;
       setTimeout(typeWriter, 60);
-    } else {
-      lineIndex++;
-      charIndex = 0;
-      setTimeout(typeWriter, 400);
-    }
-  } else {
-    messageEl.innerHTML = text.replace(/\n/g, '<br>');
-  }
+    } else { lineIndex++; charIndex = 0; setTimeout(typeWriter, 400); }
+  } else { messageEl.innerHTML = text.replace(/\n/g, '<br>'); }
 }
-
 setTimeout(typeWriter, 2000);
 
-// 尝试自动播放，失败则等用户点击
+// === 音乐 ===
 const bgm = document.getElementById('bgm');
 bgm.volume = 0.4;
 let musicStarted = false;
-
 function startMusic() {
   if (musicStarted) return;
-  bgm.play().then(() => {
-    musicStarted = true;
-    document.getElementById('musicHint').classList.add('hidden');
-  }).catch(() => {});
+  bgm.play().then(() => { musicStarted = true; document.getElementById('musicHint').classList.add('hidden'); }).catch(() => {});
 }
-
 setTimeout(startMusic, 3000);
+document.addEventListener('click', () => { startMusic(); });
 
-// 用户首次点击时也尝试播放
-document.addEventListener('click', function handler() {
-  startMusic();
-  if (musicStarted) document.removeEventListener('click', handler);
-});
-
-// 点击爱心效果
+// === 点击爱心 ===
 document.addEventListener('click', (e) => {
-  createHeart(e.clientX, e.clientY);
-});
-
-function createHeart(x, y) {
   const heart = document.createElement('div');
   heart.className = 'click-heart';
-  heart.style.left = x + 'px';
-  heart.style.top = y + 'px';
-  heart.innerHTML = `
-    <svg width="40" height="40" viewBox="0 0 24 24" fill="#ff6b8a">
-      <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-    </svg>
-    <div class="text">我喜欢你</div>
-  `;
+  heart.style.left = e.clientX + 'px';
+  heart.style.top = e.clientY + 'px';
+  heart.innerHTML = `<svg width="40" height="40" viewBox="0 0 24 24" fill="#ff6b8a"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg><div class="text">我喜欢你</div>`;
   document.body.appendChild(heart);
   setTimeout(() => heart.remove(), 2000);
-}
+});
 
-// 倒计时（设置你们认识的日期）
-const startDate = new Date('2025-08-10'); // 修改为你们认识的日期
+// === 倒计时 ===
+const startDate = new Date('2025-08-10');
 function updateCountdown() {
-  const now = new Date();
-  const diff = Math.floor((now - startDate) / (1000 * 60 * 60 * 24));
+  const diff = Math.floor((new Date() - startDate) / (1000 * 60 * 60 * 24));
   document.getElementById('days').textContent = diff;
 }
 updateCountdown();
 setInterval(updateCountdown, 60000);
+
+// === 时间线数据 ===
+const timelineData = [
+  { phase: "初遇 · v1.0" },
+  { date: "2025.08.10", ver: "v1.0", text: "梁子湖露营，初次见面" },
+  { date: "2025.08.21", ver: "v1.1", text: "成功加上微信" },
+  { date: "2025.08.26", ver: "v1.2", text: "第一次下班一起去东湖徒步" },
+  { date: "2025.08.30", ver: "v1.3", text: "第一次尝试一起看云海，仙居顶。失败" },
+  { date: "2025.09.02", ver: "v1.4", text: "第二次徒步，鹦鹉洲杨泗港大桥" },
+  { date: "2025.09.06", ver: "v1.5", text: "第一次一起坐游船，汉阳门轮渡" },
+  { date: "2025.09.07", ver: "v1.6", text: "第一次一起做手工，在江汉路做巧克力" },
+  { phase: "在一起 · v2.0" },
+  { date: "2025.09.12", ver: "v2.0", text: "一起在武昌江滩看烟花秀，正式在一起 🎆" },
+  { date: "2025.09.27", ver: "v2.1", text: "第一次在武汉体育中心看周杰伦演唱会" },
+  { date: "2025.10.01", ver: "v2.2", text: "第一次出去旅游 — 景德镇、婺源、南昌" },
+  { date: "2025.10.03", ver: "v2.3", text: "第一次爬三清山" },
+  { date: "2025.10.25", ver: "v2.4", text: "第一次去浏阳看烟花" },
+  { date: "2025.11.01", ver: "v2.5", text: "第一次去黄冈跑马拉松" },
+  { date: "2025.11.02", ver: "v2.6", text: "第二次看演唱会，邓紫棋" },
+  { date: "2025.11.09", ver: "v2.7", text: "第一次去参加朋友婚礼，江夏区-江鹏" },
+  { date: "2025.11.15", ver: "v2.8", text: "第一次手写信" },
+  { date: "2025.11.22", ver: "v2.9", text: "东湖七山" },
+  { date: "2025.11.30", ver: "v2.10", text: "第一次给十一过生日 🎂" },
+  { date: "2025.12.06", ver: "v2.11", text: "一起爬青龙山" },
+  { date: "2025.12.21", ver: "v2.12", text: "一起爬黄陂绝情谷" },
+  { date: "2025.12.25", ver: "v2.13", text: "第一次一起过圣诞节 🎄" },
+  { date: "2025.12.28", ver: "v2.14", text: "第一次一起滑雪，黄陂武汉城建热血奇迹" },
+  { phase: "新起点 · v3.0" },
+  { date: "2026.01.01", ver: "v3.0", text: "第一次去荆门十一家，见父母 🏠" },
+  { date: "2026.01.18", ver: "v3.1", text: "第一次一起泡温泉，黄陂甘露山" },
+  { date: "2026.01.24", ver: "v3.2", text: "一起爬蔡甸九真山" },
+  { date: "2026.02.14", ver: "v3.3", text: "第一次回小鹏新洲老家" },
+  { date: "2026.05.01", ver: "v3.4", text: "一起爬武功山，第一次住帐篷，第二次看云海失败" },
+  { date: "2026.05.17", ver: "v3.5", text: "第一次一起看车展" },
+];
+
+// === 渲染时间线 ===
+const timelineEl = document.getElementById('timeline');
+timelineData.forEach((item, i) => {
+  if (item.phase) {
+    const marker = document.createElement('div');
+    marker.className = 'phase-marker reveal';
+    marker.innerHTML = `<span class="phase-title">${item.phase}</span>`;
+    timelineEl.appendChild(marker);
+  } else {
+    const el = document.createElement('div');
+    el.className = 'timeline-item reveal';
+    el.innerHTML = `
+      <div class="date">${item.date}</div>
+      <div class="content">
+        <span class="version">${item.ver}</span>
+        ${item.text}
+      </div>
+    `;
+    timelineEl.appendChild(el);
+  }
+});
+
+// === 滚动动画 ===
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 </script>
 </body>
 </html>
