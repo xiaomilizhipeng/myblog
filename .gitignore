@@ -2,3 +2,7 @@ themes/
 .hugo_build.lock
 public/
 public/
+
+# AI Server
+ai-server/node_modules/
+ai-server/.env
