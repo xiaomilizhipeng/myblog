@@ -210,41 +210,6 @@ body {
 }
 .upload-preview .remove-btn:hover { background: rgba(255,107,107,0.3); }
 
-/* 缩放尺寸面板 */
-.resize-panel {
-  display: none; align-items: center; gap: 8px;
-  background: var(--surface2); border: 1px solid var(--border);
-  border-radius: 12px; padding: 8px 12px; margin-bottom: 8px;
-  max-width: 900px; margin-left: auto; margin-right: auto;
-  flex-wrap: wrap;
-}
-.resize-panel.show { display: flex; }
-.resize-panel label { font-size: 12px; color: var(--text-muted); }
-.resize-panel input[type="number"] {
-  width: 70px; background: var(--bg); border: 1px solid var(--border);
-  border-radius: 8px; padding: 4px 8px; color: var(--text); font-size: 13px;
-  outline: none; text-align: center;
-}
-.resize-panel input[type="number"]:focus { border-color: var(--primary); }
-.resize-panel .sep { color: var(--text-muted); font-size: 12px; }
-.resize-panel .resize-btn {
-  background: var(--primary); color: white; border: none;
-  padding: 5px 14px; border-radius: 8px; font-size: 12px;
-  cursor: pointer; transition: all 0.2s; white-space: nowrap;
-}
-.resize-panel .resize-btn:hover { background: var(--primary-light); }
-.resize-panel .resize-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-.resize-panel select {
-  background: var(--bg); border: 1px solid var(--border);
-  border-radius: 8px; padding: 4px 8px; color: var(--text);
-  font-size: 12px; outline: none;
-}
-.resize-panel .preset-btn {
-  background: none; border: 1px solid var(--border); color: var(--text-muted);
-  padding: 3px 10px; border-radius: 8px; font-size: 11px;
-  cursor: pointer; transition: all 0.2s;
-}
-.resize-panel .preset-btn:hover { border-color: var(--primary); color: var(--primary-light); }
 
 /* 动画 */
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -369,22 +334,6 @@ body {
     <button class="size-opt" onclick="setSize('720x1280',this)">9:16</button>
   </div>
 
-  <!-- 缩放尺寸面板 -->
-  <div class="resize-panel" id="resizePanel">
-    <label>尺寸：</label>
-    <input type="number" id="resizeW" placeholder="宽" min="1">
-    <span class="sep">x</span>
-    <input type="number" id="resizeH" placeholder="高" min="1">
-    <select id="resizeFit">
-      <option value="contain">保持比例(白边填充)</option>
-      <option value="cover">保持比例(裁剪填满)</option>
-    </select>
-    <button class="resize-btn" id="resizeBtn" onclick="doResize()">应用缩放</button>
-    <button class="preset-btn" onclick="setPreset(512,512)">512</button>
-    <button class="preset-btn" onclick="setPreset(1024,1024)">1024</button>
-    <button class="preset-btn" onclick="setPreset(1920,1080)">16:9</button>
-    <button class="preset-btn" onclick="setPreset(1080,1080)">1:1</button>
-  </div>
 
   <div class="mode-indicator" id="modeIndicator">
     <span><i class="fas fa-comments"></i> 智能对话模式</span>
@@ -461,10 +410,6 @@ function setMode(mode) {
   const btn = document.getElementById(btnId);
   if (btn) btn.classList.add('active');
 
-  // 显示/隐藏缩放面板（仅编辑模式）
-  if (uploadedImageBase64) {
-    document.getElementById('resizePanel').classList.toggle('show', mode === 'edit');
-  }
   // 显示/隐藏尺寸选择器（仅生图模式）
   document.getElementById('sizeSelector').classList.toggle('show', mode === 'image');
 
@@ -622,13 +567,7 @@ function setSize(size, btn) {
   if (btn) btn.classList.add('active');
 }
 
-function setPreset(w, h) {
-  document.getElementById('resizeW').value = w;
-  document.getElementById('resizeH').value = h;
-}
 
-async function doResize() {
-  if (!uploadedImageBase64) { alert('请先上传图片'); return; }
   const w = parseInt(document.getElementById('resizeW').value);
   const h = parseInt(document.getElementById('resizeH').value);
   if (!w && !h) { alert('请填写宽度或高度'); return; }

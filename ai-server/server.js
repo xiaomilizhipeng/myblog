@@ -10,7 +10,6 @@
 const http = require('http');
 const https = require('https');
 const url = require('url');
-const sharp = require('sharp');
 
 const PORT = process.env.AI_PORT || 3900;
 
@@ -243,59 +242,6 @@ async function handleEdit(req, res) {
   }
 }
 
-// ========== 图片缩放接口（sharp 处理，不变形） ==========
-async function handleResize(req, res) {
-  const { image, width, height, fit = 'contain' } = await parseBody(req);
-
-  if (!image) {
-    res.writeHead(400, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ error: '缺少图片参数' }));
-    return;
-  }
-
-  if (!width && !height) {
-    res.writeHead(400, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ error: '请指定宽度或高度' }));
-    return;
-  }
-
-  try {
-    // 解析 base64
-    const base64Data = image.replace(/^data:image\/\w+;base64,/, '');
-    const imgBuffer = Buffer.from(base64Data, 'base64');
-
-    // 获取原图信息
-    const metadata = await sharp(imgBuffer).metadata();
-
-    // 缩放选项：
-    // contain = 保持比例，空白填充（默认白色）
-    // cover = 保持比例，裁剪填满
-    // fill = 拉伸填满（会变形）
-    const resizeOptions = {
-      width: width || undefined,
-      height: height || undefined,
-      fit: fit === 'cover' ? 'cover' : 'contain',
-      background: { r: 255, g: 255, b: 255, alpha: 1 }
-    };
-
-    const outputBuffer = await sharp(imgBuffer)
-      .resize(resizeOptions)
-      .png()
-      .toBuffer();
-
-    const outputBase64 = 'data:image/png;base64,' + outputBuffer.toString('base64');
-
-    res.writeHead(200, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({
-      data: [{ url: outputBase64 }],
-      original: { width: metadata.width, height: metadata.height },
-      output: { width, height }
-    }));
-  } catch (err) {
-    res.writeHead(500, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ error: '图片处理失败: ' + err.message }));
-  }
-}
 
 // ========== 视频生成接口（异步） ==========
 async function handleVideo(req, res) {
@@ -388,8 +334,6 @@ const server = http.createServer(async (req, res) => {
       await handleImage(req, res);
     } else if (pathname === '/api/ai/edit' && req.method === 'POST') {
       await handleEdit(req, res);
-    } else if (pathname === '/api/ai/resize' && req.method === 'POST') {
-      await handleResize(req, res);
     } else if (pathname === '/api/ai/video' && req.method === 'POST') {
       await handleVideo(req, res);
     } else {
