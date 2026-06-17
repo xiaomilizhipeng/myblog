@@ -57,6 +57,15 @@
     </div>
 </div>
 
+<!-- 我的足迹地图 -->
+<div class="section" style="padding-top:0;">
+    <h2 class="section-title" style="font-size:18px;">🗺️ 我的足迹</h2>
+    <div id="china-map" style="width:100%;max-width:650px;height:420px;margin:0 auto;"></div>
+    <div id="map-detail" style="text-align:center;margin-top:10px;min-height:22px;color:var(--gray);font-size:13px;">
+        滑过地图上的省份查看详情
+    </div>
+</div>
+
 <!-- AI 助手入口 -->
 <div class="section" style="padding-top:0;">
     <a href="/ai.html" class="ai-banner">
@@ -94,7 +103,92 @@
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
 <script>
+// 我的足迹数据
+var travelData = {
+    '湖北': {status:'current', detail:'现居武汉 · 2016-2019 长江大学（荆州）'},
+    '吉林': {status:'lived', detail:'2022-2025 长春大学读研 · 2024长白山 · 2024四平'},
+    '福建': {status:'lived', detail:'2020-2021 福州参军 · 2019 厦门旅游'},
+    '河北': {status:'lived', detail:'2019 秦皇岛新兵连'},
+    '浙江': {status:'lived', detail:'2024 嘉兴实习 · 2024 杭州旅游'},
+    '河南': {status:'visited', detail:'2023 嵩山 · 2024 开封 · 2025 洛阳老君山 · 新乡'},
+    '陕西': {status:'visited', detail:'2023/2024 西安旅游 · LPL决赛 · 华山'},
+    '江西': {status:'visited', detail:'2025 景德镇·婺源·萍乡武功山·九江庐山·上饶三清山·南昌'},
+    '辽宁': {status:'visited', detail:'2023 大连 · 2024 盘锦 · 2025 沈阳'},
+    '山东': {status:'visited', detail:'2024 泰安泰山 · 淄博 · 东营'},
+    '安徽': {status:'visited', detail:'2025 黄山'},
+    '北京': {status:'visited', detail:'2017 小米家宴 · 2018 小米圣诞趴'},
+    '江苏': {status:'visited', detail:'2018 南京旅游'},
+    '内蒙古': {status:'visited', detail:'2022 乌海旅游'},
+    '重庆': {status:'visited', detail:'2024 重庆成都旅游'},
+    '四川': {status:'visited', detail:'2024 重庆成都旅游'},
+    '湖南': {status:'visited', detail:'2024 长沙宁乡参加婚礼'},
+    '上海': {status:'visited', detail:'2024 上海旅游'},
+};
+
+var mapChart = echarts.init(document.getElementById('china-map'));
+fetch('/china.json').then(function(r) { return r.json(); }).then(function(chinaGeo) {
+echarts.registerMap('china', chinaGeo);
+var option = {
+    tooltip: {
+        trigger: 'item',
+        formatter: function(params) {
+            var d = travelData[params.name];
+            if (d) {
+                var label = d.status === 'current' ? '📍 现居' : d.status === 'lived' ? '🏠 居住过' : '✈️ 去过';
+                return '<b>' + params.name + '</b><br/>' + label + '<br/>' + d.detail;
+            }
+            return params.name;
+        },
+        backgroundColor: 'rgba(30,30,50,0.9)',
+        borderColor: '#6c63ff',
+        textStyle: { color: '#e8e8f0', fontSize: 13 }
+    },
+    visualMap: {
+        show: false,
+        min: 0,
+        max: 2,
+        inRange: {
+            color: ['#2a2a45', '#6c63ff', '#00d4aa']
+        }
+    },
+    series: [{
+        type: 'map',
+        map: 'china',
+        roam: false,
+        label: { show: false },
+        emphasis: {
+            label: { show: true, color: '#fff', fontSize: 12 },
+            itemStyle: { areaColor: '#8b83ff' }
+        },
+        itemStyle: {
+            areaColor: '#1a1a2e',
+            borderColor: '#2a2a45',
+            borderWidth: 1
+        },
+        data: Object.keys(travelData).map(function(name) {
+            var d = travelData[name];
+            var val = d.status === 'current' ? 2 : d.status === 'lived' ? 1 : 0.5;
+            return { name: name, value: val, itemStyle: {
+                areaColor: d.status === 'current' ? '#00d4aa' : d.status === 'lived' ? '#6c63ff' : '#3a3a5e'
+            }};
+        })
+    }]
+};
+mapChart.setOption(option);
+window.addEventListener('resize', function() { mapChart.resize(); });
+}); // end fetch
+
+// 点击显示详情
+mapChart.on('click', function(params) {
+    var d = travelData[params.name];
+    if (d) {
+        var label = d.status === 'current' ? '📍 现居地' : d.status === 'lived' ? '🏠 居住过' : '✈️ 去过';
+        document.getElementById('map-detail').innerHTML = '<b>' + params.name + '</b> ' + label + ' — ' + d.detail;
+    }
+});
+
 function toggleWechat() {
     const modal = document.getElementById('wechatModal');
     modal.style.display = modal.style.display === 'none' ? 'block' : 'none';
