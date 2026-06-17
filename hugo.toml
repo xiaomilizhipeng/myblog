@@ -12,13 +12,31 @@ theme = "xiaopeng"
   bio = "一名热爱技术的开发者，分享 AI 前沿、数码科技、生活感悟"
   keywords = ["博客", "AI", "科技", "数码", "全栈开发"]
 
+  company = "佳鹏科技"
+  company_desc = "深耕 OPC 生态与 AI 应用开发，面向小微企业提供低成本信息技术咨询与数字化运维服务"
+  qq = "1162297563"
+  wechat = "xiaopeng98613"
+
   [[params.social]]
     name = "github"
     url = "https://github.com/xiaomilizhipeng"
 
   [[params.social]]
-    name = "weixin"
-    url = "#"
+    name = "bilibili"
+    url = "https://b23.tv/poE7N8h"
+
+  [[params.social]]
+    name = "zhihu"
+    url = "https://www.zhihu.com/people/li-zhi-peng-32-41"
+
+  [[params.social]]
+    name = "weibo"
+    url = "https://weibo.com/u/5014229447"
+
+  [[params.social]]
+    name = "video-camera"
+    url = "https://v.douyin.com/UVi2VU87yQI/"
+    label = "douyin"
 
   [[params.social]]
     name = "envelope"

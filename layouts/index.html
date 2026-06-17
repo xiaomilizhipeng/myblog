@@ -1,27 +1,80 @@
 {{ define "main" }}
-<!-- 首页 Hero -->
-<section class="hero">
-    <h1>你好，我是小鹏</h1>
-    <p>{{ .Site.Params.bio | default "一名热爱技术的开发者，分享编程知识、生活感悟和学习心得" }}</p>
-    <div>
-        <a href="/posts/" class="btn">查看博客</a>
-        <a href="/about/" class="btn btn-outline">关于我</a>
-        <a href="/ai.html" class="btn btn-outline" style="background:linear-gradient(135deg,#6c63ff,#00d4aa);color:white;border-color:transparent;">🤖 AI 助手</a>
+<!-- 个人名片区 -->
+<section class="hero" style="padding:40px 20px 30px;">
+    <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;justify-content:center;">
+        <img src="/images/touxiang.jpg" alt="李志鹏" style="width:90px;height:90px;border-radius:50%;object-fit:cover;border:3px solid var(--primary);box-shadow:0 4px 16px rgba(67,97,238,0.3);">
+        <div style="text-align:left;">
+            <h1 style="font-size:28px;margin-bottom:6px;">你好，我是小鹏</h1>
+            <p style="color:var(--gray);font-size:15px;margin-bottom:4px;">{{ .Site.Params.description }}</p>
+            <p style="color:var(--gray);font-size:13px;">
+                <a href="https://github.com/xiaomilizhipeng/JPCompany" target="_blank" style="color:var(--primary);text-decoration:none;font-weight:500;">🏢 {{ .Site.Params.company }}</a>
+                — {{ .Site.Params.company_desc }}
+            </p>
+        </div>
     </div>
 </section>
+
+<!-- 社交媒体图标 -->
+<div class="section" style="padding-top:0;">
+    <div class="social-grid">
+        <a href="https://github.com/xiaomilizhipeng" target="_blank" class="social-card">
+            <i class="fab fa-github"></i><span>GitHub</span>
+        </a>
+        <a href="https://b23.tv/poE7N8h" target="_blank" class="social-card">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M17.813 4.653h.854c1.51.054 2.769.578 3.773 1.574 1.004.995 1.524 2.249 1.56 3.76v7.36c-.036 1.51-.556 2.769-1.56 3.773s-2.262 1.524-3.773 1.56H5.333c-1.51-.036-2.769-.556-3.773-1.56S.036 18.858 0 17.347v-7.36c.036-1.511.556-2.765 1.56-3.76 1.004-.996 2.262-1.52 3.773-1.574h.774l-1.174-1.12a1.234 1.234 0 0 1-.373-.906c0-.356.124-.658.373-.907l.027-.027c.267-.249.573-.373.92-.373.347 0 .653.124.92.373L9.653 4.44c.071.071.134.142.187.213h4.267a.836.836 0 0 1 .16-.213l2.853-2.747c.267-.249.573-.373.92-.373.347 0 .662.124.929.373.258.258.382.56.382.907s-.124.649-.382.906zM5.333 7.24c-.746.018-1.373.276-1.88.773-.506.498-.769 1.13-.786 1.894v7.52c.017.764.28 1.395.786 1.893.507.498 1.134.756 1.88.773h13.334c.746-.017 1.373-.275 1.88-.773.506-.498.769-1.129.786-1.893v-7.52c-.017-.765-.28-1.396-.786-1.894-.507-.497-1.134-.755-1.88-.773zM8 11.107c.373 0 .684.124.933.373.25.249.383.569.4.96v1.173c-.017.391-.15.711-.4.96-.249.25-.56.374-.933.374s-.684-.125-.933-.374c-.25-.249-.383-.569-.4-.96V12.44c.017-.391.15-.711.4-.96.249-.249.56-.373.933-.373zm8 0c.373 0 .684.124.933.373.25.249.383.569.4.96v1.173c-.017.391-.15.711-.4.96-.249.25-.56.374-.933.374s-.684-.125-.933-.374c-.25-.249-.383-.569-.4-.96V12.44c.017-.391.15-.711.4-.96.249-.249.56-.373.933-.373z"/></svg><span>B站</span>
+        </a>
+        <a href="https://www.zhihu.com/people/li-zhi-peng-32-41" target="_blank" class="social-card">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M5.721 0C2.251 0 0 2.25 0 5.719V18.28C0 21.751 2.252 24 5.721 24h12.56C21.751 24 24 21.75 24 18.281V5.72C24 2.249 21.75 0 18.281 0zm1.964 4.078h5.36c.076-.328.15-.66.222-.991h-5.2c-.076.33-.15.663-.222.991zm-.477 1.265h6.31c.076-.327.15-.66.222-.99h-6.15c-.076.33-.15.663-.222.99zm-.477 1.266h7.26c.076-.328.15-.66.222-.991h-7.1c-.076.33-.15.663-.222.991zm-.477 1.265h8.21c.076-.327.15-.66.222-.99h-8.05c-.076.33-.15.663-.222.99zm-.477 1.266h9.16c.076-.328.15-.66.222-.991h-9c-.076.33-.15.663-.222.991zm-.477 1.265h10.11c.076-.327.15-.66.222-.99h-9.95c-.076.33-.15.663-.222.99zm-.477 1.266h11.06c.076-.328.15-.66.222-.991h-10.9c-.076.33-.15.663-.222.991zm-.477 1.265h12.01c.076-.327.15-.66.222-.99h-11.85c-.076.33-.15.663-.222.99zm-.477 1.266h12.96c.076-.328.15-.66.222-.991H13.4c-.076.33-.15.663-.222.991zm7.596 3.118c-.312.24-.66.36-1.044.36-.384 0-.732-.12-1.044-.36-.312-.24-.468-.576-.468-1.008 0-.432.156-.768.468-1.008.312-.24.66-.36 1.044-.36.384 0 .732.12 1.044.36.312.24.468.576.468 1.008 0 .432-.156.768-.468 1.008zm-5.4-3.63h-3.12v-1.26h3.12v1.26zm-1.56-2.52h-1.56v-1.26h1.56v1.26z"/></svg><span>知乎</span>
+        </a>
+        <a href="https://weibo.com/u/5014229447" target="_blank" class="social-card">
+            <i class="fab fa-weibo"></i><span>微博</span>
+        </a>
+        <a href="https://v.douyin.com/UVi2VU87yQI/" target="_blank" class="social-card">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.88-2.88 2.89 2.89 0 0 1 2.88-2.88c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 0 0-.79-.05A6.34 6.34 0 0 0 3.15 15.3a6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.34-6.34V8.4a8.23 8.23 0 0 0 4.8 1.56V6.69h-1.04z"/></svg><span>抖音</span>
+        </a>
+        <a href="https://xhslink.com/m/2g9P2i28Olv" target="_blank" class="social-card">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg><span>小红书</span>
+        </a>
+        <a href="https://qm.qq.com/q/{{ .Site.Params.qq }}" target="_blank" class="social-card">
+            <i class="fab fa-qq"></i><span>QQ</span>
+        </a>
+        <a href="javascript:void(0)" class="social-card" id="wechatBtn" onclick="toggleWechat()">
+            <i class="fab fa-weixin"></i><span>微信</span>
+        </a>
+    </div>
+    <!-- 微信二维码弹窗 -->
+    <div id="wechatModal" style="display:none;text-align:center;margin-top:12px;">
+        <div style="background:white;padding:16px;border-radius:12px;display:inline-block;box-shadow:var(--shadow);">
+            <img src="/images/wechat-qr.png" alt="微信二维码" style="width:160px;height:160px;border-radius:8px;">
+            <p style="font-size:12px;color:var(--gray);margin-top:6px;">微信号：xiaopeng98613</p>
+        </div>
+    </div>
+</div>
+
+<!-- AI 助手入口 -->
+<div class="section" style="padding-top:0;">
+    <a href="/ai.html" class="ai-banner">
+        <div class="ai-banner-icon">🤖</div>
+        <div class="ai-banner-text">
+            <h3>小鹏同学 · AI 助手</h3>
+            <p>智能对话 / 图片生成 / 视频生成 · 免费体验</p>
+        </div>
+        <i class="fas fa-arrow-right" style="font-size:20px;color:white;"></i>
+    </a>
+</div>
 
 <!-- 最新文章 -->
 <div class="section">
     <h2 class="section-title">最新文章</h2>
     <div class="blog-grid">
-        {{ range first 6 (where .Site.RegularPages "Section" "posts") }}
+        {{ range first 4 (where .Site.RegularPages "Section" "posts") }}
         <a href="{{ .Permalink }}" class="blog-card" style="text-decoration:none;color:inherit;">
             <div class="card-img">
                 <i class="fas fa-{{ .Params.icon | default "code" }}"></i>
             </div>
             <div class="card-content">
                 <h3>{{ .Title }}</h3>
-                <p>{{ .Summary | plainify | truncate 120 }}</p>
+                <p>{{ .Summary | plainify | truncate 100 }}</p>
                 <div class="card-meta">
                     <span>{{ .Date.Format "2006-01-02" }}</span>
                     <span>{{ .ReadingTime }} 分钟阅读</span>
@@ -30,5 +83,86 @@
         </a>
         {{ end }}
     </div>
+    <div style="text-align:center;margin-top:20px;">
+        <a href="/posts/" class="btn btn-outline" style="font-size:14px;">查看全部文章 →</a>
+    </div>
 </div>
+
+<script>
+function toggleWechat() {
+    const modal = document.getElementById('wechatModal');
+    modal.style.display = modal.style.display === 'none' ? 'block' : 'none';
+}
+</script>
+
+<style>
+.social-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    max-width: 600px;
+    margin: 0 auto;
+}
+.social-card {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: white;
+    border: 1px solid var(--light-gray);
+    border-radius: 20px;
+    text-decoration: none;
+    color: var(--dark);
+    font-size: 13px;
+    font-weight: 500;
+    transition: var(--transition);
+}
+.social-card:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    box-shadow: 0 2px 8px rgba(67,97,238,0.15);
+    transform: translateY(-1px);
+}
+.social-card i {
+    font-size: 16px;
+}
+.ai-banner {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 24px;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    border-radius: 16px;
+    text-decoration: none;
+    color: white;
+    max-width: 600px;
+    margin: 0 auto;
+    transition: var(--transition);
+}
+.ai-banner:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(67,97,238,0.4);
+}
+.ai-banner-icon {
+    font-size: 36px;
+    flex-shrink: 0;
+}
+.ai-banner-text h3 {
+    font-size: 16px;
+    margin-bottom: 4px;
+    color: white;
+}
+.ai-banner-text p {
+    font-size: 13px;
+    opacity: 0.9;
+    margin: 0;
+    color: white;
+}
+@media (max-width: 768px) {
+    .social-grid { gap: 8px; }
+    .social-card { padding: 6px 12px; font-size: 12px; }
+    .ai-banner { padding: 16px; }
+}
+</style>
 {{ end }}
