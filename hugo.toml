@@ -1,4 +1,4 @@
-baseURL = "http://8.148.12.251/"
+baseURL = "https://jiapeng.tech/"
 languageCode = "zh-cn"
 title = "小鹏视界"
 theme = "xiaopeng"
@@ -43,6 +43,11 @@ theme = "xiaopeng"
   name = "520"
   url = "/520.html"
   weight = 4
+
+[[menu.main]]
+  name = "AI 助手"
+  url = "/ai.html"
+  weight = 5
 
 [outputs]
   home = ["HTML", "RSS"]
