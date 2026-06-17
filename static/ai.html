@@ -531,8 +531,7 @@ function handleUpload(input) {
     document.getElementById('uploadSize').textContent = (file.size / 1024).toFixed(1) + ' KB';
     document.getElementById('uploadPreview').classList.add('show');
 
-    // 自动切到生图模式
-    if (currentMode !== 'image') setMode('image');
+    // 保持当前模式
   };
   reader.readAsDataURL(file);
 
