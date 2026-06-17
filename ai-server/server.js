@@ -208,39 +208,6 @@ async function handleImage(req, res) {
   }
 }
 
-// ========== 图片编辑接口（Image-to-Image） ==========
-async function handleEdit(req, res) {
-  const { prompt, image, size = '1024x1024' } = await parseBody(req);
-
-  if (!AGNES_API_KEY) {
-    res.writeHead(200, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ error: '图片编辑功能需要配置 AGNES_API_KEY 环境变量' }));
-    return;
-  }
-
-  if (!image) {
-    res.writeHead(400, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ error: '缺少图片参数' }));
-    return;
-  }
-
-  try {
-    const result = await proxyRequest(`${AGNES_BASE}/v1/images/generations`, {
-      model: IMAGE_MODEL,
-      prompt: prompt,
-      size: size,
-      extra_body: {
-        image: [image],
-        response_format: 'url'
-      }
-    });
-    res.writeHead(result.status, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify(result.data));
-  } catch (err) {
-    res.writeHead(500, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ error: err.message }));
-  }
-}
 
 
 // ========== 视频生成接口（异步） ==========
@@ -332,8 +299,6 @@ const server = http.createServer(async (req, res) => {
       await handleChat(req, res);
     } else if (pathname === '/api/ai/image' && req.method === 'POST') {
       await handleImage(req, res);
-    } else if (pathname === '/api/ai/edit' && req.method === 'POST') {
-      await handleEdit(req, res);
     } else if (pathname === '/api/ai/video' && req.method === 'POST') {
       await handleVideo(req, res);
     } else {

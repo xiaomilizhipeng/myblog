@@ -291,7 +291,7 @@ body {
   <a href="/" class="back"><i class="fas fa-arrow-left"></i></a>
   <div class="info">
     <h1>小鹏同学</h1>
-    <p>AI 助手 · 对话 / 生成图片 / 编辑图片 / 生成视频</p>
+    <p>AI 助手 · 对话 / 生成图片 / 生成视频</p>
   </div>
   <span class="badge">Agnes AI</span>
   <button onclick="toggleTheme()" style="background:none;border:1px solid var(--border);color:var(--text-muted);width:32px;height:32px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all 0.2s;" id="themeBtn" title="切换主题">🌙</button>
@@ -302,12 +302,11 @@ body {
   <div class="welcome">
     <div class="icon">🤖</div>
     <h2>你好，我是小鹏同学</h2>
-    <p>我可以和你聊天、帮你生成和编辑图片、生成视频。试试点击下方功能按钮切换模式~</p>
+    <p>我可以和你聊天、帮你生成图片和视频。试试点击下方功能按钮切换模式~</p>
     <div class="feature-chips">
       <div class="chip" onclick="setMode('chat')"><i class="fas fa-comments"></i>智能对话</div>
       <div class="chip" onclick="setMode('image')"><i class="fas fa-image"></i>生成图片</div>
-      <div class="chip" onclick="setMode('edit')"><i class="fas fa-paint-brush"></i>编辑图片</div>
-      <div class="chip" onclick="setMode('video')"><i class="fas fa-video"></i>生成视频</div>
+            <div class="chip" onclick="setMode('video')"><i class="fas fa-video"></i>生成视频</div>
     </div>
   </div>
 </div>
@@ -349,10 +348,6 @@ body {
         <button class="mode-btn" id="btnImage" onclick="setMode('image')" title="生图">
           <i class="fas fa-image"></i>
           <span class="tooltip">生成图片</span>
-        </button>
-        <button class="mode-btn" id="btnEdit" onclick="setMode('edit')" title="编辑图片">
-          <i class="fas fa-paint-brush"></i>
-          <span class="tooltip">编辑图片</span>
         </button>
         <button class="mode-btn" id="btnVideo" onclick="setMode('video')" title="视频">
           <i class="fas fa-video"></i>
@@ -396,7 +391,6 @@ let chatHistory = [
 const modeConfig = {
   chat:  { icon: 'fa-comments',    label: '智能对话模式', placeholder: '输入消息...' },
   image: { icon: 'fa-image',       label: '图片生成模式', placeholder: '描述你想生成的图片...' },
-  edit:  { icon: 'fa-paint-brush', label: '图片编辑模式', placeholder: '描述你想要的修改效果...' },
   video: { icon: 'fa-video',       label: '视频生成模式', placeholder: '描述你想生成的视频...' }
 };
 
@@ -537,8 +531,8 @@ function handleUpload(input) {
     document.getElementById('uploadSize').textContent = (file.size / 1024).toFixed(1) + ' KB';
     document.getElementById('uploadPreview').classList.add('show');
 
-    // 自动切到编辑模式
-    if (currentMode !== 'edit') setMode('edit');
+    // 自动切到生图模式
+    if (currentMode !== 'image') setMode('image');
   };
   reader.readAsDataURL(file);
 
@@ -573,12 +567,6 @@ async function sendMessage() {
   }
   lastSendTime = now;
 
-  // 编辑模式必须有图片
-  if (currentMode === 'edit' && !uploadedImageBase64) {
-    alert('请先上传一张图片');
-    return;
-  }
-
   isLoading = true;
   document.getElementById('sendBtn').disabled = true;
 
@@ -599,8 +587,6 @@ async function sendMessage() {
       await doChat(text);
     } else if (currentMode === 'image') {
       await doImage(text);
-    } else if (currentMode === 'edit') {
-      await doEdit(text);
     } else if (currentMode === 'video') {
       await doVideo(text);
     }
@@ -700,13 +686,6 @@ async function doImage(prompt) {
   else { addMessage('ai', '⚠️ 图片生成成功，但未返回 URL。'); }
 }
 
-async function doEdit(prompt) {
-  const res = await fetch(API_BASE + '/edit', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ prompt, image: uploadedImageBase64 })
-  });
-  if (!res.ok) { const err = await res.json().catch(() => ({})); throw new Error(err.error || `图片编辑失败 (${res.status})`); }
   const data = await res.json();
   const url = data.data?.[0]?.url;
   removeTyping();
