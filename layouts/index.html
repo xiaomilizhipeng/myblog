@@ -61,8 +61,24 @@
 <div class="section" style="padding-top:0;">
     <h2 class="section-title" style="font-size:18px;">🗺️ 我的足迹</h2>
     <div id="china-map" style="width:100%;height:520px;margin:0 auto;"></div>
-    <div id="map-detail" style="text-align:center;margin-top:10px;min-height:22px;color:var(--gray);font-size:13px;">
-        滑过地图上的省份查看详情
+    <div style="display:flex;gap:20px;max-width:900px;margin:12px auto 0;flex-wrap:wrap;justify-content:center;">
+        <div id="map-detail" style="flex:1;min-width:280px;text-align:center;color:var(--gray);font-size:13px;align-self:center;">
+            滑过地图上的省份查看详情
+        </div>
+        <div style="min-width:220px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 16px;">
+            <div style="font-size:13px;font-weight:600;margin-bottom:8px;color:var(--text);">⛰️ 爬过的山</div>
+            <div style="font-size:12px;color:var(--text-muted);line-height:2;">
+                <span style="color:#ffd700;">▲</span> 长白山 <span style="float:right;">2025.6</span><br>
+                <span style="color:#ffd700;">▲</span> 泰山 <span style="float:right;">2024.8</span><br>
+                <span style="color:#ffd700;">▲</span> 老君山 <span style="float:right;">2025.2</span><br>
+                <span style="color:#ffd700;">▲</span> 嵩山 <span style="float:right;">2023.8</span><br>
+                <span style="color:#ffd700;">▲</span> 华山 <span style="float:right;">2024.1</span><br>
+                <span style="color:#ffd700;">▲</span> 黄山 <span style="float:right;">2025.5</span><br>
+                <span style="color:#ffd700;">▲</span> 庐山 <span style="float:right;">2025.6</span><br>
+                <span style="color:#ffd700;">▲</span> 三清山 <span style="float:right;">2025.10</span><br>
+                <span style="color:#ffd700;">▲</span> 武功山 <span style="float:right;">2025.5</span><br>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -146,16 +162,20 @@ echarts.registerMap('china', chinaGeo);
 var option = {
     tooltip: {
         trigger: 'item',
+        confine: true,
         formatter: function(params) {
+            // 山的信息
             if (params.seriesType === 'scatter') {
                 return '⛰️ <b>' + params.data.name + '</b><br/>🕐 ' + params.data.time + ' 攀登';
             }
-            var d = travelData[params.name];
+            // 省份信息
+            var name = params.name;
+            var d = travelData[name];
             if (d) {
                 var label = d.status === 'current' ? '📍 现居' : d.status === 'lived' ? '🏠 居住过' : '✈️ 去过';
-                return '<b>' + params.name + '</b><br/>' + label + '<br/>' + d.detail;
+                return '<b>' + name + '</b><br/>' + label + '<br/>' + d.detail;
             }
-            return params.name;
+            return name;
         },
         backgroundColor: 'rgba(30,30,50,0.9)',
         borderColor: '#6c63ff',
@@ -192,19 +212,8 @@ var option = {
         type: 'scatter',
         coordinateSystem: 'geo',
         symbol: 'triangle',
-        symbolSize: 14,
-        label: {
-            show: true,
-            formatter: function(p) { return p.data.time + '\n' + p.data.name; },
-            position: 'right',
-            distance: 8,
-            color: '#ffd700',
-            fontSize: 11,
-            fontWeight: 'bold',
-            lineHeight: 14,
-            textShadowColor: 'rgba(0,0,0,0.8)',
-            textShadowBlur: 3
-        },
+        symbolSize: 18,
+        label: { show: false },
         itemStyle: {
             color: '#ffd700',
             borderColor: '#fff',
