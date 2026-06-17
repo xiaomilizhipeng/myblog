@@ -142,14 +142,12 @@ var option = {
         trigger: 'item',
         confine: true,
         formatter: function(params) {
-            // 省份信息
             var name = params.name;
+            if (!name) return '';
             var d = travelData[name];
-            if (d) {
-                var label = d.status === 'current' ? '📍 现居' : d.status === 'lived' ? '🏠 居住过' : '✈️ 去过';
-                return '<b>' + name + '</b><br/>' + label + '<br/>' + d.detail;
-            }
-            return name;
+            if (!d) return name;
+            var label = d.status === 'current' ? '📍 现居' : d.status === 'lived' ? '🏠 居住过' : '✈️ 去过';
+            return '<div style="min-width:150px"><b style="font-size:14px;">' + name + '</b><br/><span style="color:#00d4aa;">' + label + '</span><br/><span style="font-size:12px;color:#ccc;">' + d.detail + '</span></div>';
         },
         backgroundColor: 'rgba(30,30,50,0.9)',
         borderColor: '#6c63ff',
