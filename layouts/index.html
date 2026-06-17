@@ -161,16 +161,7 @@ var option = {
         borderColor: '#6c63ff',
         textStyle: { color: '#e8e8f0', fontSize: 13 }
     },
-    visualMap: {
-        show: false,
-        min: 0,
-        max: 2,
-        inRange: {
-            color: ['#2a2a45', '#6c63ff', '#00d4aa']
-        }
-    },
-    series: [{
-        type: 'map',
+    geo: {
         map: 'china',
         roam: true,
         zoom: 1.2,
@@ -185,21 +176,23 @@ var option = {
             borderColor: '#2a2a45',
             borderWidth: 1
         },
-        data: Object.keys(travelData).map(function(name) {
+        regions: Object.keys(travelData).map(function(name) {
             var d = travelData[name];
-            var val = d.status === 'current' ? 2 : d.status === 'lived' ? 1 : 0.5;
-            return { name: name, value: val, itemStyle: {
-                areaColor: d.status === 'current' ? '#00d4aa' : d.status === 'lived' ? '#6c63ff' : '#3a3a5e'
-            }};
+            return {
+                name: name,
+                itemStyle: {
+                    areaColor: d.status === 'current' ? '#00d4aa' : d.status === 'lived' ? '#6c63ff' : '#3a3a5e'
+                }
+            };
         })
     },
+    series: [
     // 山峰标记 - 三角形
     {
         type: 'scatter',
         coordinateSystem: 'geo',
         symbol: 'triangle',
         symbolSize: 14,
-        symbolRotate: 0,
         label: {
             show: true,
             formatter: function(p) { return p.data.time + '\n' + p.data.name; },
@@ -223,14 +216,13 @@ var option = {
             return {
                 name: m.name,
                 value: m.coord.concat(m.name, m.time),
-                time: m.time,
-                itemStyle: { color: '#ffd700' }
+                time: m.time
             };
         })
     }
     ]
 };
-mapChart.setOption(option);
+mapChart.setOption(option);mapChart.setOption(option);
 window.addEventListener('resize', function() { mapChart.resize(); });
 }); // end fetch
 
