@@ -65,19 +65,6 @@
         <div id="map-detail" style="flex:1;min-width:280px;text-align:center;color:var(--gray);font-size:13px;align-self:center;">
             滑过地图上的省份查看详情
         </div>
-        <div style="min-width:220px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 16px;">
-            <div style="font-size:13px;font-weight:600;margin-bottom:8px;color:var(--text);">⛰️ 爬过的山</div>
-            <div style="font-size:12px;color:var(--text-muted);line-height:2;">
-                <span style="color:#ffd700;">▲</span> 长白山 <span style="float:right;">2025.6</span><br>
-                <span style="color:#ffd700;">▲</span> 泰山 <span style="float:right;">2024.8</span><br>
-                <span style="color:#ffd700;">▲</span> 老君山 <span style="float:right;">2025.2</span><br>
-                <span style="color:#ffd700;">▲</span> 嵩山 <span style="float:right;">2023.8</span><br>
-                <span style="color:#ffd700;">▲</span> 华山 <span style="float:right;">2024.1</span><br>
-                <span style="color:#ffd700;">▲</span> 黄山 <span style="float:right;">2025.5</span><br>
-                <span style="color:#ffd700;">▲</span> 庐山 <span style="float:right;">2025.6</span><br>
-                <span style="color:#ffd700;">▲</span> 三清山 <span style="float:right;">2025.10</span><br>
-                <span style="color:#ffd700;">▲</span> 武功山 <span style="float:right;">2025.5</span><br>
-            </div>
         </div>
     </div>
 </div>
@@ -143,19 +130,6 @@ var travelData = {
     '上海市': {status:'visited', detail:'✈️ 2024.9 上海旅游'},
 };
 
-// 爬过的山 [经度, 纬度, 名称, 时间]
-var mountainData = [
-    {name:'长白山', coord:[128.1, 42.0], time:'2025.6'},
-    {name:'泰山', coord:[117.1, 36.2], time:'2024.8'},
-    {name:'老君山', coord:[111.6, 33.7], time:'2025.2'},
-    {name:'嵩山', coord:[112.9, 34.5], time:'2023.8'},
-    {name:'华山', coord:[110.1, 34.5], time:'2024.1'},
-    {name:'黄山', coord:[118.2, 30.1], time:'2025.5'},
-    {name:'庐山', coord:[115.9, 29.6], time:'2025.6'},
-    {name:'三清山', coord:[118.1, 28.9], time:'2025.10'},
-    {name:'武功山', coord:[114.2, 27.5], time:'2025.5'},
-];
-
 var mapChart = echarts.init(document.getElementById('china-map'));
 fetch('/china.json').then(function(r) { return r.json(); }).then(function(chinaGeo) {
 echarts.registerMap('china', chinaGeo);
@@ -207,30 +181,7 @@ var option = {
         })
     },
     series: [
-    // 山峰标记 - 三角形
-    {
-        type: 'scatter',
-        coordinateSystem: 'geo',
-        symbol: 'triangle',
-        symbolSize: 18,
-        label: { show: false },
-        itemStyle: {
-            color: '#ffd700',
-            borderColor: '#fff',
-            borderWidth: 1,
-            shadowBlur: 6,
-            shadowColor: 'rgba(255,215,0,0.5)'
-        },
-        data: mountainData.map(function(m) {
-            return {
-                name: m.name,
-                value: m.coord.concat(m.name, m.time),
-                time: m.time
-            };
-        })
-    }
-    ]
-};
+    };
 mapChart.setOption(option);mapChart.setOption(option);
 window.addEventListener('resize', function() { mapChart.resize(); });
 }); // end fetch
