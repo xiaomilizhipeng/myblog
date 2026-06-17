@@ -138,10 +138,6 @@ var option = {
         trigger: 'item',
         confine: true,
         formatter: function(params) {
-            // 山的信息
-            if (params.seriesType === 'scatter') {
-                return '⛰️ <b>' + params.data.name + '</b><br/>🕐 ' + params.data.time + ' 攀登';
-            }
             // 省份信息
             var name = params.name;
             var d = travelData[name];
@@ -180,9 +176,9 @@ var option = {
             };
         })
     },
-    series: [
-    };
-mapChart.setOption(option);mapChart.setOption(option);
+    series: []
+};
+mapChart.setOption(option);
 window.addEventListener('resize', function() { mapChart.resize(); });
 }); // end fetch
 
