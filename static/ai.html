@@ -685,21 +685,6 @@ async function doImage(prompt) {
   else { addMessage('ai', '⚠️ 图片生成成功，但未返回 URL。'); }
 }
 
-  const data = await res.json();
-  const url = data.data?.[0]?.url;
-  removeTyping();
-  if (url) {
-    addMessage('ai', '🎨 图片已编辑：', { image: url });
-    // 编辑后保留图片，支持继续编辑
-    uploadedImageBase64 = url;
-    document.getElementById('uploadThumb').src = url;
-    document.getElementById('uploadName').textContent = '已编辑图片';
-    document.getElementById('uploadSize').textContent = '可继续编辑';
-  } else {
-    addMessage('ai', '⚠️ 图片编辑成功，但未返回 URL。');
-  }
-}
-
 async function doVideo(prompt) {
   const body = { prompt };
   if (uploadedImageBase64) body.image_url = uploadedImageBase64;
