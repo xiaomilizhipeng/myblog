@@ -537,15 +537,6 @@ function handleUpload(input) {
     document.getElementById('uploadSize').textContent = (file.size / 1024).toFixed(1) + ' KB';
     document.getElementById('uploadPreview').classList.add('show');
 
-    // 获取原图尺寸并显示缩放面板
-    const img = new Image();
-    img.onload = () => {
-      document.getElementById('resizeW').value = img.width;
-      document.getElementById('resizeH').value = img.height;
-      document.getElementById('resizePanel').classList.add('show');
-    };
-    img.src = uploadedImageBase64;
-
     // 自动切到编辑模式
     if (currentMode !== 'edit') setMode('edit');
   };
@@ -558,7 +549,6 @@ function handleUpload(input) {
 function removeUpload() {
   uploadedImageBase64 = null;
   document.getElementById('uploadPreview').classList.remove('show');
-  document.getElementById('resizePanel').classList.remove('show');
 }
 
 function setSize(size, btn) {
@@ -568,45 +558,6 @@ function setSize(size, btn) {
 }
 
 
-  const w = parseInt(document.getElementById('resizeW').value);
-  const h = parseInt(document.getElementById('resizeH').value);
-  if (!w && !h) { alert('请填写宽度或高度'); return; }
-
-  const fit = document.getElementById('resizeFit').value;
-  const btn = document.getElementById('resizeBtn');
-  btn.disabled = true;
-  btn.textContent = '处理中...';
-
-  addTyping();
-
-  try {
-    const res = await fetch(API_BASE + '/resize', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ image: uploadedImageBase64, width: w || null, height: h || null, fit })
-    });
-    if (!res.ok) { const err = await res.json().catch(() => ({})); throw new Error(err.error || '缩放失败'); }
-    const data = await res.json();
-    const url = data.data?.[0]?.url;
-    removeTyping();
-    if (url) {
-      const orig = data.original;
-      const out = data.output;
-      addMessage('ai', `\u{1F4D0} 图片已缩放 (${orig.width}x${orig.height} \u2192 ${out.width}x${out.height})：`, { image: url });
-      // 用缩放后的图片替换当前上传的图片
-      uploadedImageBase64 = url;
-      document.getElementById('uploadThumb').src = url;
-    } else {
-      addMessage('ai', '\u26A0\uFE0F 缩放成功，但未返回图片。');
-    }
-  } catch (err) {
-    removeTyping();
-    addMessage('ai', '\u274C ' + err.message);
-  }
-
-  btn.disabled = false;
-  btn.textContent = '应用缩放';
-}
 
 // ========== 发送消息 ==========
 async function sendMessage() {
