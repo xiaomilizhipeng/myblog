@@ -68,10 +68,7 @@
 <div class="section" style="padding-top:0;">
     <h2 class="section-title" style="font-size:18px;">🗺️ 我的足迹</h2>
     <div id="china-map" style="width:100%;height:520px;margin:0 auto;"></div>
-    <div style="display:flex;gap:20px;max-width:900px;margin:12px auto 0;flex-wrap:wrap;justify-content:center;">
-        <div id="map-detail" style="flex:1;min-width:280px;text-align:center;color:var(--gray);font-size:13px;align-self:center;">
-            滑过地图上的省份查看详情
-        </div>
+    
         </div>
     </div>
 </div>
@@ -188,15 +185,6 @@ var option = {
 mapChart.setOption(option);
 window.addEventListener('resize', function() { mapChart.resize(); });
 }); // end fetch
-
-// 点击显示详情
-mapChart.on('click', function(params) {
-    var d = travelData[params.name];
-    if (d) {
-        var label = d.status === 'current' ? '📍 现居地' : d.status === 'lived' ? '🏠 居住过' : '✈️ 去过';
-        document.getElementById('map-detail').innerHTML = '<b>' + params.name + '</b> ' + label + ' — ' + d.detail;
-    }
-});
 
 function toggleWechat() {
     const modal = document.getElementById('wechatModal');
